@@ -1,0 +1,23 @@
+.video-div {
+    max-width: 90vw;
+}
+
+.vd {
+    width: 50%;
+}
+
+.vd video {
+    width: 100%;
+}
+
+@media(max-width:800px) {
+    .video-div {
+        flex-direction: column;
+        height: 70vh;
+    }
+
+    .mainDiv {
+        display: flex;
+        justify-content: center;
+    }
+}

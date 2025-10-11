@@ -20,6 +20,15 @@ io.on('connection', (socket) => {
     const totatClient = io.engine.clientsCount
     console.log('total clients connected :', totatClient);
 
+    if (waitingUser) {
+        io.to(socket.id).emit('matched', { partnerId: waitingUser });
+        io.to(waitingUser).emit('matched', { partnerId: socket.id });
+    }
+    else {
+        waitingUser = socket.id;
+
+    }
+
     socket.on('disconnect', () => {
         console.log(socket.id, 'disconnected');
         console.log('remaining clients: ', io.engine.clientsCount)

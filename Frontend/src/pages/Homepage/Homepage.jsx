@@ -1,4 +1,5 @@
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
+import './Homepage.css'
 
 
 
@@ -10,6 +11,10 @@ const socket = io("http://localhost:4000");
 
 
 export default function Homepage() {
+
+
+    const myVideoRef = useRef(null);
+    const peerVideoRef = useRef(null);
 
     useEffect(() => {
         function establishConnection() {
@@ -33,12 +38,43 @@ export default function Homepage() {
     }, [])
 
 
+    useEffect(() => {
+        const startCamera = async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true })
+                if (myVideoRef.current) {
+                    myVideoRef.current.srcObject = stream;
+                }
+            } catch (err) {
+                console.log('error accessing audio/video ', err)
+            }
+
+        }
+
+        startCamera();
+    }, [])
+
+
 
 
 
     return (
-        <>
-            hello from homepage
-        </>
+        <div>
+
+            <div className="mainDiv">
+                <div className="video-div container d-flex gap-1">
+                    <div className="myVideoDiv vd">
+                        <video id="myVideo" autoPlay ref={myVideoRef} />
+                    </div>
+                    <div className="peerVideoDiv vd">
+                        <video id="peerVideo" autoPlay ref={myVideoRef} />
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </div>
     )
 }
