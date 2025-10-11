@@ -1,5 +1,6 @@
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import './Homepage.css'
+import { Button, CircularProgress, Skeleton } from '@mui/material'
 
 
 
@@ -15,6 +16,8 @@ export default function Homepage() {
 
     const myVideoRef = useRef(null);
     const peerVideoRef = useRef(null);
+    const [isBuffer, setIsBuffer] = useState(false);
+    const [isMatched, setIsMatched] = useState(false);
 
     useEffect(() => {
         function establishConnection() {
@@ -52,10 +55,19 @@ export default function Homepage() {
         }
 
         startCamera();
-    }, [])
+    }, []);
 
+    const handleMatched = (partnerId) => {
 
+    }
 
+    const handleStart = () => {
+        setIsBuffer(true);
+        const peer = new RTCPeerConnection({ iceServers: [{ urls: "stun:stun.l.google.com:19302" }] });
+
+        socket.on('waiting',)
+        socket.on('matched', (data) => { handleMatched(data.partnerId) });
+    }
 
 
     return (
@@ -63,14 +75,27 @@ export default function Homepage() {
 
             <div className="mainDiv">
                 <div className="video-div container d-flex gap-1">
+                    <div className="peerVideoDiv vd">
+                        {(!isMatched) ? (<Skeleton
+                            sx={{ bgcolor: 'grey.900', borderRadius: '1rem' }}
+                            variant="rectangular"
+                            width={'100%'}
+                            height={'100%'}
+                        />) : (<video id="peerVideo" autoPlay />)}
+                        {isBuffer && <div className="circular-progress-bar"><CircularProgress /></div>}
+                    </div>
+
+
                     <div className="myVideoDiv vd">
                         <video id="myVideo" autoPlay ref={myVideoRef} />
                     </div>
-                    <div className="peerVideoDiv vd">
-                        <video id="peerVideo" autoPlay ref={myVideoRef} />
-                    </div>
                 </div>
             </div>
+
+            <div className="buttonDiv d-flex justify-content-center mt-3">
+                <Button variant="contained" onClick={handleStart}>Start</Button>
+            </div>
+
 
 
 
