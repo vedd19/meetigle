@@ -18,16 +18,21 @@ export class RoomManager {
 
     onOffer(roomId, sdp) {
 
-        const user2 = this.#rooms.get(roomId)?.user2
+        console.log(roomId, "rooms : ", this.#rooms);
+        // console.log(this.#rooms.get(roomId.toString()));
+        const user2 = this.#rooms.get(roomId.toString())?.user2
         user2?.socket.emit('offer', {
+            roomId,
             sdp
-        })
+        });
+        // console.log(user2)
 
     }
 
     onAnswer(roomId, sdp) {
-        const user1 = this.#rooms.get(roomId)?.user1;
-        user1?.socket.emit('offer', {
+        const user1 = this.#rooms.get(roomId.toString())?.user1;
+        user1?.socket.emit('answer', {
+            roomId,
             sdp
         })
     }

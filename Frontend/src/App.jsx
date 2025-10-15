@@ -1,14 +1,16 @@
 
 
+import { Outlet } from 'react-router-dom'
 import './App.css'
-import Homepage from './pages/Homepage/Homepage'
+import Landing from './components/Landing/Landing'
+
 
 function App() {
 
 
   return (
     <>
-      <Homepage />
+      <Outlet />
     </>
   )
 }
