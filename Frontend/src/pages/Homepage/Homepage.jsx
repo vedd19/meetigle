@@ -16,6 +16,7 @@ export default function Homepage() {
 
     const myVideoRef = useRef(null);
     const peerVideoRef = useRef(null);
+    const localStreamRef = useRef(null);
     const [isBuffer, setIsBuffer] = useState(false);
     const [isMatched, setIsMatched] = useState(false);
 
@@ -46,6 +47,7 @@ export default function Homepage() {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true })
                 if (myVideoRef.current) {
+                    localStreamRef.current = stream;
                     myVideoRef.current.srcObject = stream;
                 }
             } catch (err) {
@@ -57,15 +59,66 @@ export default function Homepage() {
         startCamera();
     }, []);
 
-    const handleMatched = (partnerId) => {
+    const handleMatched = async (partnerId) => {
 
+        const peer = new RTCPeerConnection({ iceServers: [{ urls: "stun:stun.l.google.com:19302" }] });
+
+        const stream = localStreamRef.current;
+
+        if (stream) {
+            console.log("getting tracks")
+            // setIsBuffer(false)
+            stream.getTracks().forEach(track => peer.addTrack(track, stream));
+        }
+
+        peer.ontrack = (event) => {
+            if (peerVideoRef.current) {
+                setIsMatched(true);
+                peerVideoRef.current.srcObject = event.streams[0];
+                console.log("peerVideo");
+            }
+
+            console.log('heelo')
+        }
+
+        peer.onicecandidate = (event) => {
+            if (event.candidate) {
+                socket.emit('iceCandidate', { candidate: event.candidate, partnerId })
+            }
+        }
+
+        //if i was the one who got matched first, i create the offer, since both are unique strings, any one of them will definitly smaller.
+
+        if (socket.id < partnerId) {
+            const offer = await peer.createOffer();
+            await peer.setLocalDescription(offer);
+            socket.emit('offer', { sdp: offer, partnerId });
+        }
+
+        socket.on('offer', async ({ sdp, from }) => {
+            await peer.setRemoteDescription({ type: sdp.type, sdp: sdp.sdp });
+            const answer = await peer.createAnswer();
+            await peer.setLocalDescription(answer);
+            socket.emit('answer', { sdp: answer, partnerId: from })
+        });
+
+        socket.on('answer', async ({ sdp }) => {
+            await peer.setRemoteDescription({ type: sdp.type, sdp: sdp.sdp });
+        });
+
+        socket.on('iceCandidate', async (candidate) => {
+            try {
+                await peer.addIceCandidate(new RTCIceCandidate(candidate));
+            } catch (err) {
+                console.error('error while adding received ice candidate', err);
+            }
+        })
     }
 
     const handleStart = () => {
-        setIsBuffer(true);
-        const peer = new RTCPeerConnection({ iceServers: [{ urls: "stun:stun.l.google.com:19302" }] });
+        // setIsBuffer(true);
 
-        socket.on('waiting',)
+        socket.on('waiting', () => console.log('waiting for partner!'))
         socket.on('matched', (data) => { handleMatched(data.partnerId) });
     }
 
@@ -81,8 +134,8 @@ export default function Homepage() {
                             variant="rectangular"
                             width={'100%'}
                             height={'100%'}
-                        />) : (<video id="peerVideo" autoPlay />)}
-                        {isBuffer && <div className="circular-progress-bar"><CircularProgress /></div>}
+                        />) : (<video id="peerVideo" autoPlay ref={peerVideoRef} />)}
+                        {/* {isBuffer && <div className="circular-progress-bar"><CircularProgress /></div>} */}
                     </div>
 
 

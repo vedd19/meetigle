@@ -11,23 +11,17 @@ const io = new Server(httpServer, {
 });
 
 
-const waitingUser = null;
+// let waitingUser = null;
 
 io.on('connection', (socket) => {
 
-    console.log('connected to the client', socket.id);
+    console.log('a user is connected', socket.id);
 
-    const totatClient = io.engine.clientsCount
-    console.log('total clients connected :', totatClient);
 
-    if (waitingUser) {
-        io.to(socket.id).emit('matched', { partnerId: waitingUser });
-        io.to(waitingUser).emit('matched', { partnerId: socket.id });
-    }
-    else {
-        waitingUser = socket.id;
 
-    }
+    //anytime a connection happens we have a user.
+
+
 
     socket.on('disconnect', () => {
         console.log(socket.id, 'disconnected');
