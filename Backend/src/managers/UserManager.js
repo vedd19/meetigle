@@ -38,7 +38,7 @@ export class UserManager {
         // if (!user)
 
         this.#users = this.#users.filter(user => user.socket.id !== socketId);
-        this.#queue = this.#queue.filter(x => x !== socketId);
+        this.#queue = this.#queue.filter(x => x.id !== socketId);
         // const roomId = this.generate();
 
     }
@@ -73,13 +73,17 @@ export class UserManager {
     initHandlers(socket) {
         socket.on('offer', ({ sdp, roomId }) => {
             console.log('inside getting offer in initHandler', roomId)
-            this.#roomManager.onOffer(roomId, sdp)
+            this.#roomManager.onOffer(roomId, sdp, socket.id)
         });
 
         socket.on('answer', ({ sdp, roomId }) => {
             console.log('inside getting answer in initHandler', roomId)
-            this.#roomManager.onAnswer(roomId, sdp);
+            this.#roomManager.onAnswer(roomId, sdp, socket.id);
         })
+
+        socket.on('add-ice-candidate', ({ candidate, roomId, type }) => {
+            this.#roomManager.onIceCandidates(roomId, socket.id, candidate, type);
+        });
 
 
     }
