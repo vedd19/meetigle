@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { io } from "socket.io-client";
+import './Room.css'
 
 const URL = 'http://localhost:4000';
 
@@ -227,13 +228,20 @@ export default function Room({ name, localAudioTrack, localVideoTrack }) {
 
 
     return (
-        <div>
+        <div className="room-container">
+            <div className="room-header">Hello, {name}</div>
 
-            hello {name}
+            <div className="video-grid">
+                <div className="video-container">
+                    <video className="localVideo" ref={localVideoRef} autoPlay playsInline></video>
+                    <span className="name-tag">You</span>
+                </div>
 
-            <video className='localVideo' width={400} height={400} ref={localVideoRef} autoPlay></video>
-            <video className='remoteVideo' width={400} height={400} ref={remoteVideoRef} autoPlay></video>
-
+                <div className="video-container">
+                    <video className="remoteVideo" ref={remoteVideoRef} autoPlay playsInline></video>
+                    <span className="name-tag">Peer</span>
+                </div>
+            </div>
         </div>
     )
 }

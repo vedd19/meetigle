@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Room from "../Room/Room";
+import './Landing.css'
 
 export default function Landing() {
 
@@ -42,11 +43,11 @@ export default function Landing() {
 
 
         return (
-            <div>
-                <video ref={videoRef} autoPlay></video>
-                <input type="text" onChange={(e) => setName(e.target.value)} />
+            <div className="landing-video-div">
+                <video id="landingVideo" ref={videoRef} autoPlay></video>
+                <input id="landing-input" type="text" onChange={(e) => setName(e.target.value)} />
 
-                <button onClick={() => {
+                <button id="button" onClick={() => {
                     setJoined(true);
                 }}>Join</button>
             </div>
