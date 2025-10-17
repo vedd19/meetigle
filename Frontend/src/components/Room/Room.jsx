@@ -28,6 +28,7 @@ export default function Room({ name, localAudioTrack, localVideoTrack }) {
 
         const socket = io(URL, {
             transports: ["websocket"],
+            withCredentials: true,
         })
 
         socket.on('send-offer', async ({ roomId }) => {
