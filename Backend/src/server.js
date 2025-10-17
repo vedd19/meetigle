@@ -8,14 +8,14 @@ import cors from 'cors'
 
 const app = express();
 app.use(cors({
-    origin: ['http://localhost:5173', 'https://meetigle.vercel.app'],
+    origin: ['https://meetigle-frontend.onrender.com'],
     methods: ['GET', 'POST'],
     credentials: true
 }))
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
     cors: {
-        origin: ['http://localhost:5173', 'https://meetigle.vercel.app'],
+        origin: ['https://meetigle-frontend.onrender.comp'],
         methods: ['GET', 'POST'],
         credentials: true
     }
