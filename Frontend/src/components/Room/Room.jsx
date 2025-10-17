@@ -33,6 +33,7 @@ export default function Room({ name, localAudioTrack, localVideoTrack }) {
             // reconnectionAttempts: Infinity,
             // reconnectionDelay: 500,
             // reconnectionDelayMax: 5000,
+            withCredentials: true,
         })
 
         socket.on('send-offer', async ({ roomId }) => {
