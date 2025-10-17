@@ -8,27 +8,9 @@ import { UserManager } from './managers/UserManager.js';
 
 const app = express();
 
+
 const httpServer = createServer(app);
-const io = new Server(httpServer, {
-    cors: {
-        origin: "*",
-        methods: ['GET', 'POST'],
-        credentials: true
-    }
-});
-
-// {
-//     cors: {
-//         origin: "*",
-//         // [
-//         // process.env.FRONTEND_ORIGIN,        // e.g. your production domain
-//         // process.env.FRONTEND_PREVIEW_ORIGIN // optional: previews
-//         // ].filter(Boolean),
-
-//         methods: ["GET", "POST"],
-//         // credentials: true
-//     },
-// }
+const io = new Server(httpServer, { cors: { origin: 'https://meetigle-frontend.onrender.com', methods: ["GET", "POST"] } });
 
 const port = process.env.PORT || 5000;
 

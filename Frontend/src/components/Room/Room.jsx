@@ -27,13 +27,7 @@ export default function Room({ name, localAudioTrack, localVideoTrack }) {
     useEffect(() => {
 
         const socket = io(URL, {
-            // transports: ["websocket"],       // optional: prefer websocket
-            // // path: "/socket.io",           // keep default unless changed server-side
-            // reconnection: true,
-            // reconnectionAttempts: Infinity,
-            // reconnectionDelay: 500,
-            // reconnectionDelayMax: 5000,
-            withCredentials: true,
+            transports: ["websocket"],
         })
 
         socket.on('send-offer', async ({ roomId }) => {
