@@ -5,7 +5,7 @@ import { io } from "socket.io-client";
 import './Room.css'
 
 // const URL = 'http://localhost:4000';
-const URL = process.env.NEXT_PUBLIC_BACKEND_URL || process.env.REACT_APP_BACKEND_URL;
+const URL = 'https://meetiglebackend.onrender.com';
 
 export default function Room({ name, localAudioTrack, localVideoTrack }) {
 
@@ -27,12 +27,12 @@ export default function Room({ name, localAudioTrack, localVideoTrack }) {
     useEffect(() => {
 
         const socket = io(URL, {
-            transports: ["websocket"],       // optional: prefer websocket
-            // path: "/socket.io",           // keep default unless changed server-side
-            reconnection: true,
-            reconnectionAttempts: Infinity,
-            reconnectionDelay: 500,
-            reconnectionDelayMax: 5000,
+            // transports: ["websocket"],       // optional: prefer websocket
+            // // path: "/socket.io",           // keep default unless changed server-side
+            // reconnection: true,
+            // reconnectionAttempts: Infinity,
+            // reconnectionDelay: 500,
+            // reconnectionDelayMax: 5000,
         })
 
         socket.on('send-offer', async ({ roomId }) => {

@@ -7,7 +7,9 @@ import cors from 'cors'
 
 
 const app = express();
-app.use(cors())
+app.use(cors({
+    credentials: true
+}))
 const httpServer = createServer(app);
 const io = new Server(httpServer);
 
