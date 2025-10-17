@@ -2,20 +2,16 @@ import express from 'express'
 import { createServer } from 'http'
 import { Server } from 'socket.io';
 import { UserManager } from './managers/UserManager.js';
-import cors from 'cors'
+
 
 
 
 const app = express();
-app.use(cors({
-    origin: ['https://meetigle-frontend.onrender.com'],
-    methods: ['GET', 'POST'],
-    credentials: true
-}))
+
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
     cors: {
-        origin: ['https://meetigle-frontend.onrender.comp'],
+        origin: "*",
         methods: ['GET', 'POST'],
         credentials: true
     }
